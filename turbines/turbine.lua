@@ -14,7 +14,7 @@
 --   5=JetCat      6=KingTech    7=AMT         8=Xicoy/Kolibri
 --   9=JetCentral  10=Kolibri NG 11=Swiwin     12=Linton
 --
--- Version: 2.1
+-- Version: 2.11
 -- Filename: turbine.lua  (max 8 chars before extension)
 -- Place in /Apps/ folder on SD card
 -- ─────────────────────────────────────────────────────────────────
@@ -340,9 +340,6 @@ local function printTelemetry(width, height)
         r, g, b = getColour(currentCode)
     end
 
-    -- Draw white background to match other widgets
-    lcd.setColor(255, 255, 255)
-    lcd.drawFilledRectangle(0, 0, width, height)
     lcd.setColor(r, g, b)
     lcd.drawText(5, 5, displayText, statusFont)
 end
