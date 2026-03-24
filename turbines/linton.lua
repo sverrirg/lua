@@ -206,9 +206,9 @@ local function init()
     statusSensor = system.pLoad("turbSens")
     statusParam  = system.pLoad("turbParm")
 
-    system.registerForm(1, MENU_APPS, "Turbine Status", initForm, keyPressed, printForm)
-    -- Size 3 = user can toggle Double in the Displayed Telemetry screen
-    system.registerTelemetry(1, "Turbine status", 1, printTelemetry)
+    system.registerForm(33, MENU_APPS, "Turbine Status", initForm, keyPressed, printForm)
+    -- Size 1 = single slot, Size 2 = double slot, Size 3 = user can toggle Double in the Displayed Telemetry screen
+    system.registerTelemetry(33, "Turbine status", 1, printTelemetry)
 end
 
 -- ── Loop ─────────────────────────────────────────────────────────
