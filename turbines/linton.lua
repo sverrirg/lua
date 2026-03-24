@@ -9,7 +9,7 @@
 -- Turbine name is configurable in the setup form and used
 -- as the widget title.
 --
--- Version: 1.8
+-- Version: 1.9
 -- Filename: linton.lua  (max 8 chars before extension)
 -- Place in /Apps/ folder on SD card
 -- ─────────────────────────────────────────────────────────────────
@@ -21,7 +21,7 @@ local currentCode    = nil
 
 -- Detect device and emulator
 -- devId: 1=DS-16, 2=DS-24II
-local devId, emulator = system.getDeviceType()
+local devId = system.getDeviceType()
 local isDS16 = (devId == 1)
 
 -- ── Status code table ─────────────────────────────────────────────
@@ -109,23 +109,8 @@ local function resolveCode(code)
     end
 end
 
--- ── Mock data generator (emulator only) ──────────────────────────
-local mockCodes  = { 0, 1, 3, 18, 19, 21, 28, -1, -14 }
-local mockIndex  = 1
-local mockTimer  = nil
-local MOCK_STEP  = 3000  -- ms per code step
-
-local function getMockValue()
-    if mockTimer == nil then
-        mockTimer = system.getTimeCounter()
-    end
-    local elapsed = system.getTimeCounter() - mockTimer
-    mockIndex = (math.floor(elapsed / MOCK_STEP) % #mockCodes) + 1
-    return mockCodes[mockIndex], true
-end
-
 -- ── Live sensor reader ────────────────────────────────────────────
-local function getLiveValue()
+local function getValue()
     if statusSensor and statusParam then
         local sensorData = system.getSensorByID(statusSensor, statusParam)
         if sensorData and sensorData.valid then
@@ -134,8 +119,6 @@ local function getLiveValue()
     end
     return nil, false
 end
-
-local getValue = emulator ~= 0 and getMockValue or getLiveValue
 
 -- ── Sensor changed callback ───────────────────────────────────────
 local function sensorChanged(value)
@@ -182,10 +165,6 @@ local function initForm(formID)
         form.addLabel({ label = string.format("  %d = %s", code, text) })
     end
 
-    if emulator ~= 0 then
-        form.addRow(1)
-        form.addLabel({ label = "** EMULATOR: cycling through all codes **" })
-    end
 end
 
 local function keyPressed(key) end
@@ -218,9 +197,6 @@ end
 local function printTelemetry(width, height)
     local statusFont = isDS16 and FONT_NORMAL or FONT_BIG
     local displayText, r, g, b = getStatusDisplay()
-    -- Draw white background to match other widgets
-    lcd.setColor(255, 255, 255)
-    lcd.drawFilledRectangle(0, 0, width, height)
     lcd.setColor(r, g, b)
     lcd.drawText(5, 5, displayText, statusFont)
 end
@@ -249,7 +225,7 @@ end
 return {
     init    = init,
     loop    = loop,
-    author  = "Custom",
-    version = "1.8",
-    name    = "Turbine",
+    author  = "Sverrir Gunnlaugsson",
+    version = "1.9",
+    name    = "Linton",
 }
