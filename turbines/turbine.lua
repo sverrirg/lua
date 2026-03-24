@@ -14,7 +14,7 @@
 --   5=JetCat      6=KingTech    7=AMT         8=Xicoy/Kolibri
 --   9=JetCentral  10=Kolibri NG 11=Swiwin     12=Linton
 --
--- Version: 2.11
+-- Version: 2.2
 -- Filename: turbine.lua  (max 8 chars before extension)
 -- Place in /Apps/ folder on SD card
 -- ─────────────────────────────────────────────────────────────────
@@ -25,7 +25,7 @@ local sensorsAvail   = {}
 local currentCode    = nil
 local turbineType    = 1
 
-local devId, emulator = system.getDeviceType()
+local devId = system.getDeviceType()
 local isDS16 = (devId == 1)
 
 -- ── Turbine name list ─────────────────────────────────────────────
@@ -247,20 +247,8 @@ local function getColour(code)
     return 0, 0, 0                              -- black: normal
 end
 
--- ── Mock data generator (emulator only) ──────────────────────────
-local mockCodes = { 0, 3, 10, 18, 21, 28, -1, -14 }
-local mockTimer = nil
-local MOCK_STEP = 2500
-
-local function getMockValue()
-    if mockTimer == nil then mockTimer = system.getTimeCounter() end
-    local elapsed = system.getTimeCounter() - mockTimer
-    local idx = (math.floor(elapsed / MOCK_STEP) % #mockCodes) + 1
-    return mockCodes[idx], true
-end
-
 -- ── Live sensor reader ────────────────────────────────────────────
-local function getLiveValue()
+local function getValue()
     if statusSensor and statusParam then
         local sensorData = system.getSensorByID(statusSensor, statusParam)
         if sensorData and sensorData.valid then
@@ -269,8 +257,6 @@ local function getLiveValue()
     end
     return nil, false
 end
-
-local getValue = emulator ~= 0 and getMockValue or getLiveValue
 
 -- ── Sensor changed callback ───────────────────────────────────────
 local function sensorChanged(value)
@@ -318,10 +304,6 @@ local function initForm(formID)
     form.addLabel({ label = "Status sensor", width = 120 })
     form.addSelectbox(list, curIndex, true, sensorChanged, { width = 190 })
 
-    if emulator ~= 0 then
-        form.addRow(1)
-        form.addLabel({ label = "** EMULATOR: cycling through codes **" })
-    end
 end
 
 local function keyPressed(key) end
@@ -372,7 +354,7 @@ end
 return {
     init    = init,
     loop    = loop,
-    author  = "Custom",
-    version = "2.1",
+    author  = "Sverrir Gunnlaugsson",
+    version = "2.2",
     name    = "Turbine",
 }
