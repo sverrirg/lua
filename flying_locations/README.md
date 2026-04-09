@@ -8,6 +8,7 @@ Small app that keeps a list of slopes and their wind directions, perfect to use 
 -- File layout on SD card:\
 --   Apps/flyloc.lua\
 --   Apps/flyloc/flyloc.jsn\
+--\
 -- Version: 1.7
 
 ## Files
