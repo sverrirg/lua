@@ -3,7 +3,7 @@ Small app that keeps a list of slopes and their wind directions, perfect to use 
 
 ## Description
 -- Flying Locations — Jeti DC/DS transmitter app\
--- Compatible with DS-16 and DS-24 on firmware 4.22+\
+-- Should be compatible with DS-16 and DS-24 on firmware 4.22+\
 --\
 -- File layout on SD card:\
 --   Apps/flyloc.lua\
