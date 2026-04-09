@@ -33,3 +33,6 @@ Edit an existing slope.\
 
 ### flyloc.lua
 Uncompiled code, human readable can be run on the transmitter but takes more memory space.
+
+## Project support
+If you found this helpful and would like to donate to my coffee fund, you can do so here [https://paypal.me/sverrirgu](https://paypal.me/sverrirgu).
