@@ -10,3 +10,6 @@ Fuel widget that rounds the fuel status in milliliters to the neareast 100 ml an
 
 ## [turbines](https://github.com/sverrirg/lua/tree/main/turbines)
 Small turbine widgets that tell you the status behind the ECU codes in plain text.
+
+## Project support
+If you found this helpful and would like to donate to my coffee fund, you can do so here [https://paypal.me/sverrirgu](https://paypal.me/sverrirgu).
