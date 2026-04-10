@@ -20,6 +20,9 @@ flyloc.jsn can be edited on your computer before uploading to the transmitter. I
 3. Copy `flyloc.jsn` to `Apps/flyloc/`
 4. On the transmitter go to Applications → User Applications → + to activate
 
+If you have another version of the F3F Tool or have made changes to the file structure you can edit the location on line 24.\
+_local F3F_FILE  = "Apps/f3fTool-21/slopeData.jsn"_
+
 ## Screenshots
 
 After you add the application under User Applications it appears under Applications.\
@@ -52,6 +55,9 @@ Edit an existing slope.\
 
 ### flyloc.lua
 Uncompiled code, human readable can be run on the transmitter but takes more memory space.
+
+### flyloc.lc
+Compiled code, takes less space in the transmitters memory.
 
 ## Project support
 If you found this helpful and would like to donate to my coffee fund, you can do so here [https://paypal.me/sverrirgu](https://paypal.me/sverrirgu).
