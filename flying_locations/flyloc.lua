@@ -329,6 +329,6 @@ return {
     init    = init,
     loop    = loop,
     author  = "Sverrir Gunnlaugsson",
-    version = "4.0",
+    version = "1.1",
     name    = "Flying Locations",
 }
