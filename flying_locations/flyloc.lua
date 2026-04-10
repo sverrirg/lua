@@ -1,8 +1,8 @@
 -- ─────────────────────────────────────────────────────────────────
 -- https://github.com/sverrirg/lua/tree/main/flying_locations
--- 
+--
 -- Flying Locations — Jeti DC/DS transmitter app
--- Compatible with DS-16 (devID 1) and DS-24II (devID 2)
+-- Compatible with DS-12, DS/DC-14 II, DS/DC-16 II, DS-24 and DS/DC-24 II
 -- on firmware 4.22+
 --
 -- Single form with two views toggled by F1:
@@ -13,11 +13,12 @@
 --   Apps/flyloc.lua
 --   Apps/flyloc/flyloc.jsn
 --
--- Version: 1.7
+-- Version: 3.0
 -- ─────────────────────────────────────────────────────────────────
 
-local devId  = system.getDeviceType()
-local isDS16 = (devId == 1)
+-- DS/DC-24 II have a 480x480 screen; all other current models use 320x240.
+local devName = system.getDeviceType()
+local isLarge = (string.find(devName, "24 II") ~= nil or string.find(devName, "24II") ~= nil)
 
 local DATA_DIR  = "Apps/flyloc"
 local DATA_FILE = "Apps/flyloc/flyloc.jsn"
@@ -76,11 +77,11 @@ local function windLabel(deg)
 end
 
 -- ── Layout ───────────────────────────────────────────────────────
-local ROW_H   = isDS16 and 13 or 19
-local FONT_H  = isDS16 and FONT_MINI or FONT_NORMAL
-local FONT_HD = isDS16 and FONT_MINI or FONT_BOLD
-local COL2_X  = isDS16 and 112 or 228
-local VISIBLE = isDS16 and 5 or 8
+local ROW_H   = isLarge and 28 or 19
+local FONT_H  = FONT_NORMAL
+local FONT_HD = FONT_BOLD
+local COL2_X  = isLarge and 228 or 230
+local VISIBLE = isLarge and 10 or 8
 
 -- ── Form init — rebuilds widgets for current view ─────────────────
 local function initForm(formID)
@@ -192,7 +193,7 @@ end
 local function printForm()
     if viewAdd then return end   -- widgets handle the add view
 
-    local scrW = isDS16 and 148 or 320
+    local scrW = isLarge and 440 or 300
 
     lcd.setColor(0, 0, 0)
     lcd.drawText(2, 0, "Slope / Location", FONT_HD)
@@ -211,6 +212,7 @@ local function printForm()
     if scrollIndex > maxScroll then scrollIndex = maxScroll end
 
     local last = math.min(scrollIndex + VISIBLE - 1, #locations)
+    local textOff = isLarge and 5 or 0
     for i = scrollIndex, last do
         local loc  = locations[i]
         local rowY = divY + 2 + (i - scrollIndex) * ROW_H
@@ -218,15 +220,15 @@ local function printForm()
             lcd.setColor(60, 60, 200)
             lcd.drawFilledRectangle(0, rowY - 1, scrW - 8, ROW_H)
             lcd.setColor(255, 255, 255)
-        elseif not isDS16 and (i % 2 == 0) then
+        elseif  (i % 2 == 0) then
             lcd.setColor(238, 238, 250)
-            lcd.drawFilledRectangle(0, rowY - 1, COL2_X - 4, ROW_H)
+            lcd.drawFilledRectangle(0, rowY - 1, scrW - 8, ROW_H)
             lcd.setColor(0, 0, 0)
         else
             lcd.setColor(0, 0, 0)
         end
-        lcd.drawText(4,      rowY, loc.name,            FONT_H)
-        lcd.drawText(COL2_X, rowY, windLabel(loc.wind), FONT_H)
+        lcd.drawText(4,      rowY + textOff, loc.name,            FONT_H)
+        lcd.drawText(COL2_X, rowY + textOff, windLabel(loc.wind), FONT_H)
     end
 
     -- Scrollbar
@@ -258,6 +260,6 @@ return {
     init    = init,
     loop    = loop,
     author  = "Sverrir Gunnlaugsson",
-    version = "1.7",
+    version = "3.2",
     name    = "Flying Locations",
 }
