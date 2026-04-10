@@ -9,7 +9,7 @@ File layout on SD card:\
    Apps/flyloc.lua\
    Apps/flyloc/flyloc.jsn\
 \
-Version: 1.7\
+Version: 1.1\
 \
 flyloc.jsn can be edited on your computer before uploading to the transmitter. It is in a standard json format.
 
