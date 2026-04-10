@@ -11,6 +11,13 @@ File layout on SD card:\
 \
 Version: 1.7
 
+## Installation
+
+1. Copy `flyloc.lua` to `Apps/` on the SD card
+2. Create the folder `Apps/flyloc/`
+3. Copy `flyloc.jsn` to `Apps/flyloc/`
+4. On the transmitter go to Applications → User Applications → + to activate
+
 ## Screenshots
 
 After you add the application under User Applications it appears under Applications.\
