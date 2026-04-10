@@ -3,13 +3,22 @@ Small app that keeps a list of slopes and their wind directions, perfect to use 
 
 ## Description
 Flying Locations — Jeti DC/DS transmitter app\
-Should be compatible with models 12, 14, 16 & 24 on firmware 4.22+\
+Should be compatible with all Jeti transmitters on firmware 4.22+\
 \
 File layout on SD card:\
    Apps/flyloc.lua\
    Apps/flyloc/flyloc.jsn\
 \
-Version: 1.7
+Version: 1.7\
+\
+flyloc.jsn can be edited on your computer before uploading to the transmitter. It is in a standard json format.
+
+## Installation
+
+1. Copy `flyloc.lua` to `Apps/` on the SD card
+2. Create the folder `Apps/flyloc/`
+3. Copy `flyloc.jsn` to `Apps/flyloc/`
+4. On the transmitter go to Applications → User Applications → + to activate
 
 ## Screenshots
 
