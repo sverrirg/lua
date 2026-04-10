@@ -98,9 +98,9 @@ local function sendToF3F()
         io.write(f, json.encode(data))
         io.close(f)
         notify(string.format("%s - %d\194\176|sent to F3F Tool",
-            loc.name, loc.wind))
+            loc.name, loc.wind), 3000)
     else
-        notify("Error: Could not write|to F3F Tool slope file.")
+        notify("Error: Could not write|to F3F Tool slope file.", 2000)
     end
 end
 
