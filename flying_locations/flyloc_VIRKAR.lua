@@ -6,14 +6,14 @@
 -- on firmware 4.22+
 --
 -- Single form with two views toggled by F1:
---   Browse view — scrollable list, F1 = send to F3F Tool, F3 = Add
---   Add view    — input fields,    F1 = back to list
+--   Browse view — scrollable list, F1 = "Add"
+--   Add view    — input fields,    F1 = "List"
 --
 -- File layout on SD card:
 --   Apps/flyloc.lua
 --   Apps/flyloc/flyloc.jsn
 --
--- Version: 1.1
+-- Version: 3.0
 -- ─────────────────────────────────────────────────────────────────
 
 -- DS/DC-24 II have a 480x480 screen; all other current models use 320x240.
@@ -21,7 +21,6 @@ local devName = system.getDeviceType()
 local isLarge = (string.find(devName, "24 II") ~= nil or string.find(devName, "24II") ~= nil)
 
 local DATA_DIR  = "Apps/flyloc"
-local F3F_FILE  = "Apps/f3fTool-21/slopeData.jsn"
 local DATA_FILE = "Apps/flyloc/flyloc.jsn"
 
 -- ── State ────────────────────────────────────────────────────────
@@ -33,11 +32,6 @@ local editIndex     = nil        -- nil = adding new, number = editing existing
 
 local inputName = ""
 local inputWind = 0
-
--- Notification state
-local notifyMsg    = nil   -- message to show, nil = none
-local notifyTime   = 0     -- system time when notification was set
-local notifyTimeout = 5000 -- ms to show notification
 
 -- ── Sort / Save / Load ───────────────────────────────────────────
 local function sortLocations()
@@ -69,39 +63,6 @@ local function loadData()
         end
     end
     sortLocations()
-end
-
--- ── Timed notification ───────────────────────────────────────────
-local function notify(msg, timeout)
-    notifyMsg     = msg
-    notifyTime    = system.getTimeCounter()
-    notifyTimeout = timeout or 5000
-end
-
--- ── Send bearing to F3F Tool ─────────────────────────────────────
-local function sendToF3F()
-    if #locations == 0 then return end
-    local loc = locations[selectedIndex]
-    -- F3F Tool uses the slope edge direction: add 90° with 360° rollover
-    local bearing = (math.floor(loc.wind) + 90) % 360
-
-    -- Read existing slopeData to preserve other fields
-    local text = io.readall(F3F_FILE)
-    local data = {}
-    if text and #text > 2 then
-        data = json.decode(text) or {}
-    end
-    data.bearing = bearing
-
-    local f = io.open(F3F_FILE, "w")
-    if f then
-        io.write(f, json.encode(data))
-        io.close(f)
-        notify(string.format("%s - %d\194\176|sent to F3F Tool",
-            loc.name, loc.wind))
-    else
-        notify("Error: Could not write|to F3F Tool slope file.")
-    end
 end
 
 -- ── Wind compass label ────────────────────────────────────────────
@@ -163,7 +124,6 @@ local function initForm(formID)
         })
     else
         -- Browse view — no widgets, pure custom draw
-        form.setButton(1, ":play", ENABLED)
         form.setButton(2, ":edit", ENABLED)
         form.setButton(3, ":add", ENABLED)
         form.setButton(4, ":delete", ENABLED)
@@ -188,11 +148,6 @@ local function keyPressed(key)
         inputWind = 0
         editIndex = nil
         form.reinit()
-        return
-    end
-    -- F1 = send to F3F Tool (browse view only)
-    if key == KEY_1 and not viewAdd then
-        sendToF3F()
         return
     end
     -- Scroll and delete only active in browse view
@@ -222,7 +177,6 @@ local function keyPressed(key)
             end
         elseif key == KEY_4 then
             if #locations > 0 then
-                local deletedName = locations[selectedIndex].name
                 table.remove(locations, selectedIndex)
                 if selectedIndex > #locations then
                     selectedIndex = math.max(1, #locations)
@@ -230,7 +184,6 @@ local function keyPressed(key)
                 scrollIndex = math.max(1, math.min(scrollIndex,
                     math.max(1, #locations - VISIBLE + 1)))
                 saveData()
-                notify(string.format("\"%s\" deleted", deletedName), 2000)
             end
         end
     end
@@ -278,28 +231,6 @@ local function printForm()
         lcd.drawText(COL2_X, rowY + textOff, windLabel(loc.wind), FONT_H)
     end
 
-    -- Timed notification overlay
-    if notifyMsg and (system.getTimeCounter() - notifyTime) < notifyTimeout then
-        local boxW = isLarge and 300 or 280
-        local boxH = 44
-        local boxX = 8
-        local boxY = math.floor((VISIBLE * ROW_H) / 2) - math.floor(boxH / 2) + divY
-        lcd.setColor(240, 240, 200)
-        lcd.drawFilledRectangle(boxX, boxY, boxW, boxH)
-        lcd.setColor(0, 0, 0)
-        lcd.drawRectangle(boxX, boxY, boxW, boxH)
-        -- Split message into two lines
-        local line1, line2 = string.match(notifyMsg, "^(.-)|(.+)$")
-        if line1 then
-            lcd.drawText(boxX + 8, boxY + 6,  line1, FONT_NORMAL)
-            lcd.drawText(boxX + 8, boxY + 24, line2, FONT_NORMAL)
-        else
-            lcd.drawText(boxX + 8, boxY + 14, notifyMsg, FONT_NORMAL)
-        end
-    elseif notifyMsg and (system.getTimeCounter() - notifyTime) >= notifyTimeout then
-        notifyMsg = nil
-    end
-
     -- Scrollbar
     if #locations > VISIBLE then
         local barX    = scrW - 6
@@ -329,6 +260,6 @@ return {
     init    = init,
     loop    = loop,
     author  = "Sverrir Gunnlaugsson",
-    version = "4.0",
+    version = "3.2",
     name    = "Flying Locations",
 }
