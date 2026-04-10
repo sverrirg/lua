@@ -44,7 +44,7 @@ Edit an existing slope.\
 ![Screen1](docs/images/fl4.png)
 \
 \
-*Please note that for the send to F3F Tool option to work with the current version you need to go to User Applications and reload the Lua apps using the F2 button. Doing that forces the F3F Tool to read the slopeData file as this app can not reload other lua apps. So at the moment you might as well go directly to the Course Setup in the F3F Tool. I'm talking with Frank to see if we can do something about that.\
+*_Please note that for the send to F3F Tool option to work with the current version you need to go to User Applications and reload the Lua apps using the F2 button. Doing that forces the F3F Tool to read the slopeData file as this app can not reload other lua apps. So at the moment you might as well go directly to the Course Setup in the F3F Tool. I'm talking with Frank to see if we can do something about that._\
 \
 ![Screen1](docs/images/fl5.png)
 
