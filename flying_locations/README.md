@@ -26,8 +26,13 @@ After you add the application under User Applications it appears under Applicati
 \
 ![Screen1](docs/images/fl1.png)
 
-List of slopes, that you can add, edit or delete from.\
-\
+**Main screen is a list of slopes, that you can add, edit or delete from.**
+* F1 - Send slope to F3F Tool *
+* F2 - Edit selected slope
+* F3 - Add new slope
+* F4 - Delete selected slope
+
+
 ![Screen1](docs/images/fl2.png)
 
 Add new slope.\
@@ -37,6 +42,11 @@ Add new slope.\
 Edit an existing slope.\
 \
 ![Screen1](docs/images/fl4.png)
+\
+\
+*Please note that for the send to F3F Tool option to work with the current version you need to go to User Applications and reload the Lua apps using the F2 button. Doing that forces the F3F Tool to read the slopeData file as this app can not reload other lua apps. So at the moment you might as well go directly to the Course Setup in the F3F Tool. I'm talking with Frank to see if we can do something about that.\
+\
+![Screen1](docs/images/fl5.png)
 
 ## Files
 
