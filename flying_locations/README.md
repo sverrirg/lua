@@ -51,6 +51,10 @@ Edit an existing slope.\
 \
 ![Screen1](docs/images/fl5.png)
 
+## Video
+
+![https://youtube.com/shorts/USY6QJld7JA](docs/images/fl6_yt.png)
+
 ## Files
 
 ### flyloc.lua
