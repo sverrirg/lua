@@ -53,7 +53,7 @@ Edit an existing slope.\
 
 ## Video
 
-[![Watch the video](docs/images/fl6_ytv.png)](https://youtube.com/shorts/USY6QJld7JA)
+[![Watch the video](docs/images/fl6_ytv.png)](https://youtube.com/shorts/KEnfwXbVfs8)
 
 ## Files
 
