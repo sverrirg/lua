@@ -53,7 +53,9 @@ Edit an existing slope.\
 
 ## Video
 
-[![Watch the video](docs/images/fl6_ytv.png)](https://youtube.com/shorts/KEnfwXbVfs8)
+<a href="https://youtube.com/shorts/KEnfwXbVfs8">
+    <img src="docs/images/fl6_ytv.png" alt="Flying Locations and F3F Tool working together" width="400">
+  </a>
 
 ## Files
 
