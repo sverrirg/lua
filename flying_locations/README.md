@@ -15,7 +15,7 @@ flyloc.jsn can be edited on your computer before uploading to the transmitter. I
 
 ## Installation
 
-1. Copy `flyloc.lua` to `Apps/` on the transmitter
+1. Copy `flyloc.lua` to `Apps/` folder on the transmitter
 2. Create the folder `Apps/flyloc/`
 3. Copy `flyloc.jsn` to `Apps/flyloc/`
 4. On the transmitter go to Applications → User Applications → + to activate
