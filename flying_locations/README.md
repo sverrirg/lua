@@ -4,6 +4,7 @@ Small app that keeps a list of slopes and their wind directions, perfect to use 
 ## Description
 Flying Locations — Jeti DC/DS transmitter app\
 Should be compatible with all Jeti transmitters on firmware 4.22+\
+Remember to set the starting point on the slope!\
 \
 File layout on the transmitter:\
    Apps/flyloc.lua\
