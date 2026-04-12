@@ -97,6 +97,7 @@ local function sendToF3F()
     if f then
         io.write(f, json.encode(data))
         io.close(f)
+        f3fTool_extCourseChange = true    -- signal F3F Tool to reload course data
         notify(string.format("%s - %d\194\176|sent to F3F Tool",
             loc.name, loc.wind), 3000)
     else
