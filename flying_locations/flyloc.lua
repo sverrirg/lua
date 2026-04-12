@@ -13,7 +13,7 @@
 --   Apps/flyloc.lua
 --   Apps/flyloc/flyloc.jsn
 --
--- Version: 1.1
+-- Version: 1.2
 -- ─────────────────────────────────────────────────────────────────
 
 -- DS/DC-24 II have a 480x480 screen; all other current models use 320x240.
@@ -330,6 +330,6 @@ return {
     init    = init,
     loop    = loop,
     author  = "Sverrir Gunnlaugsson",
-    version = "1.1",
+    version = "1.2",
     name    = "Flying Locations",
 }
