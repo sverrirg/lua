@@ -9,7 +9,7 @@ File layout on the transmitter:\
    Apps/flyloc.lua\
    Apps/flyloc/flyloc.jsn\
 \
-Version: 1.1\
+Version: 1.2\
 \
 flyloc.jsn can be edited on your computer before uploading to the transmitter. It is in a standard json format.
 
