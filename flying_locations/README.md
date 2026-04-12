@@ -11,7 +11,7 @@ File layout on the transmitter:\
 \
 Version: 1.2\
 \
-flyloc.jsn can be edited on your computer before uploading to the transmitter. It is in a standard json format.
+flyloc.jsn can be edited on your computer before uploading to the transmitter. It is in a standard json format.\
 A compiled .lc version is also included if needed but most should be able to run the .lua file.
 
 ## Installation
