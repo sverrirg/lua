@@ -31,7 +31,7 @@
 --   Apps/flyloc.lua
 --   Apps/flyloc/flyloc.jsn
 --
--- Version: 1.3.0
+-- Version: 1.3.5
 -- ─────────────────────────────────────────────────────────────────
 
 -- DS/DC-24 II have a 480x480 screen; all other current models use 320x240.
@@ -153,6 +153,7 @@ end
 local ROW_H   = isLarge and 28 or 19
 local FONT_H  = FONT_NORMAL
 local FONT_HD = FONT_BOLD
+local COL1_X  = 8
 local COL2_X  = isLarge and 228 or 218
 local VISIBLE = isLarge and 7 or 6
 
@@ -293,16 +294,16 @@ local function printForm()
     local scrW = isLarge and 440 or 300
 
     lcd.setColor(0, 0, 0)
-    local hdrName = sortByWind and "Slope / Location" or "Slope / Location "
-    local hdrWind = sortByWind and "Wind " or "Wind"
-    lcd.drawText(2, 0, hdrName, FONT_HD)
+    local hdrName = sortByWind and "Slope" or "Slope *"
+    local hdrWind = sortByWind and "Wind *" or "Wind"
+    lcd.drawText(COL1_X, 0, hdrName, FONT_HD)
     lcd.drawText(COL2_X, 0, hdrWind, FONT_HD)
     local divY = ROW_H
     lcd.drawLine(0, divY, scrW, divY)
 
     if #displayLocations == 0 then
         lcd.setColor(120, 120, 120)
-        lcd.drawText(4, divY + 4, "No locations — press F3 to add.", FONT_H)
+        lcd.drawText(COL1_X, divY + 4, "No locations — press F3 to add.", FONT_H)
         lcd.setColor(0, 0, 0)
         return
     end
@@ -326,7 +327,7 @@ local function printForm()
         else
             lcd.setColor(0, 0, 0)
         end
-        lcd.drawText(4,      rowY + textOff, string.sub(loc.name, 1, 25), FONT_H)
+        lcd.drawText(COL1_X, rowY + textOff, string.sub(loc.name, 1, 25), FONT_H)
         lcd.drawText(COL2_X, rowY + textOff, windLabel(loc.wind), FONT_H)
     end
 
@@ -381,6 +382,6 @@ return {
     init    = init,
     loop    = loop,
     author  = "Sverrir Gunnlaugsson",
-    version = "1.3.0",
+    version = "1.3.5",
     name    = "Flying Locations",
 }
