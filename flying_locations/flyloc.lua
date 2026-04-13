@@ -209,8 +209,8 @@ local function keyPressed(key)
         form.reinit()
         return
     end
-    -- F1 = send to F3F Tool (browse view only)
-    if key == KEY_1 and not viewAdd then
+    -- F1 or scroll wheel click = send to F3F Tool (browse view only)
+    if (key == KEY_1 or key == KEY_ENTER) and not viewAdd then
         sendToF3F()
         return
     end
