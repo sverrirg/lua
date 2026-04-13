@@ -32,8 +32,9 @@ After you add the application under User Applications it appears under Applicati
 \
 ![Screen1](docs/images/fl1.png)
 
-**Main screen is a list of slopes, that you can add, edit or delete from.**
-* F1 - Change the sort order, default is by slope, * indicates what sort is active
+**Main screen is a list of slopes, that you can add, edit or delete from.**\
+Click the scroll wheel to send a slope over to the F3F Tool, remember to set your starting point afterwards.
+* F1 - Change the sort order, * indicates which sort is active, default is by slope
 * F2 - Edit selected slope
 * F3 - Add new slope
 * F4 - Delete selected slope
