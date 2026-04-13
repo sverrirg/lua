@@ -31,7 +31,7 @@
 --   Apps/flyloc.lua
 --   Apps/flyloc/flyloc.jsn
 --
--- Version: 1.2.1
+-- Version: 1.3.0
 -- ─────────────────────────────────────────────────────────────────
 
 -- DS/DC-24 II have a 480x480 screen; all other current models use 320x240.
@@ -43,11 +43,13 @@ local F3F_FILE  = "Apps/f3fTool-21/slopeData.jsn"
 local DATA_FILE = "Apps/flyloc/flyloc.jsn"
 
 -- ── State ────────────────────────────────────────────────────────
-local locations   = {}
-local scrollIndex     = 1
-local selectedIndex = 1      -- currently highlighted row
-local viewAdd       = false   -- false = browse, true = add
-local editIndex     = nil        -- nil = adding new, number = editing existing
+local locations        = {}
+local displayLocations = {}   -- view order (name or wind sort)
+local sortByWind       = false
+local scrollIndex      = 1
+local selectedIndex    = 1      -- currently highlighted row
+local viewAdd          = false   -- false = browse, true = add
+local editIndex        = nil        -- nil = adding new, number = editing existing
 
 local inputName = ""
 local inputWind = 0
@@ -62,6 +64,18 @@ local function sortLocations()
     table.sort(locations, function(a, b)
         return string.lower(a.name) < string.lower(b.name)
     end)
+end
+
+local function rebuildDisplay()
+    displayLocations = {}
+    for i = 1, #locations do
+        displayLocations[i] = locations[i]
+    end
+    if sortByWind then
+        table.sort(displayLocations, function(a, b)
+            return a.wind < b.wind
+        end)
+    end
 end
 
 local function saveData()
@@ -87,6 +101,7 @@ local function loadData()
         end
     end
     sortLocations()
+    rebuildDisplay()
 end
 
 -- ── Timed notification ───────────────────────────────────────────
@@ -98,8 +113,8 @@ end
 
 -- ── Send bearing to F3F Tool ─────────────────────────────────────
 local function sendToF3F()
-    if #locations == 0 then return end
-    local loc = locations[selectedIndex]
+    if #displayLocations == 0 then return end
+    local loc = displayLocations[selectedIndex]
     -- F3F Tool uses the slope edge direction: add 90° with 360° rollover
     local bearing = (math.floor(loc.wind) + 90) % 360
 
@@ -167,6 +182,7 @@ local function initForm(formID)
                     sortLocations()
                 end
                 saveData()
+                rebuildDisplay()
                 inputName = ""
                 inputWind = 0
                 editIndex = nil
@@ -182,7 +198,7 @@ local function initForm(formID)
         })
     else
         -- Browse view — no widgets, pure custom draw
-        form.setButton(1, ":play", ENABLED)
+        form.setButton(1, ":refresh", ENABLED)
         form.setButton(2, ":edit", ENABLED)
         form.setButton(3, ":add", ENABLED)
         form.setButton(4, ":delete", ENABLED)
@@ -209,16 +225,23 @@ local function keyPressed(key)
         form.reinit()
         return
     end
-    -- F1 or scroll wheel click = send to F3F Tool (browse view only)
-    if (key == KEY_1 or key == KEY_ENTER) and not viewAdd then
+    -- F1 = toggle sort order (browse view only)
+    if key == KEY_1 and not viewAdd then
+        sortByWind = not sortByWind
+        rebuildDisplay()
+        selectedIndex = 1
+        scrollIndex   = 1
+        return
+    end
+    -- Scroll wheel click = send to F3F Tool (browse view only)
+    if key == KEY_ENTER and not viewAdd then
         sendToF3F()
         return
     end
     -- Scroll and delete only active in browse view
     if not viewAdd then
-        local maxScroll = math.max(1, #locations - VISIBLE + 1)
         if key == KEY_DOWN then
-            if selectedIndex < #locations then
+            if selectedIndex < #displayLocations then
                 selectedIndex = selectedIndex + 1
             end
             if selectedIndex > scrollIndex + VISIBLE - 1 then
@@ -232,28 +255,36 @@ local function keyPressed(key)
                 scrollIndex = selectedIndex
             end
         elseif key == KEY_2 then
-            if #locations > 0 then
-                editIndex = selectedIndex
-                inputName = locations[selectedIndex].name
-                inputWind = locations[selectedIndex].wind
+            if #displayLocations > 0 then
+                local loc = displayLocations[selectedIndex]
+                for idx, l in ipairs(locations) do
+                    if l == loc then editIndex = idx; break end
+                end
+                inputName = loc.name
+                inputWind = loc.wind
                 viewAdd = true
                 form.reinit()
             end
         elseif key == KEY_4 then
-            if #locations > 0 then
-                local deletedName = locations[selectedIndex].name
-                table.remove(locations, selectedIndex)
-                if selectedIndex > #locations then
-                    selectedIndex = math.max(1, #locations)
+            if #displayLocations > 0 then
+                local loc = displayLocations[selectedIndex]
+                local deletedName = loc.name
+                for idx, l in ipairs(locations) do
+                    if l == loc then table.remove(locations, idx); break end
+                end
+                rebuildDisplay()
+                if selectedIndex > #displayLocations then
+                    selectedIndex = math.max(1, #displayLocations)
                 end
                 scrollIndex = math.max(1, math.min(scrollIndex,
-                    math.max(1, #locations - VISIBLE + 1)))
+                    math.max(1, #displayLocations - VISIBLE + 1)))
                 saveData()
-                notify(string.format("\"%s\" deleted", deletedName), 2000)
+                notify(string.format('"%s" deleted', deletedName), 2000)
             end
         end
     end
 end
+
 
 -- ── Custom draw (browse view only) ───────────────────────────────
 local function printForm()
@@ -262,25 +293,27 @@ local function printForm()
     local scrW = isLarge and 440 or 300
 
     lcd.setColor(0, 0, 0)
-    lcd.drawText(2, 0, "Slope / Location", FONT_HD)
-    lcd.drawText(COL2_X, 0, "Wind", FONT_HD)
+    local hdrName = sortByWind and "Slope / Location" or "Slope / Location "
+    local hdrWind = sortByWind and "Wind " or "Wind"
+    lcd.drawText(2, 0, hdrName, FONT_HD)
+    lcd.drawText(COL2_X, 0, hdrWind, FONT_HD)
     local divY = ROW_H
     lcd.drawLine(0, divY, scrW, divY)
 
-    if #locations == 0 then
+    if #displayLocations == 0 then
         lcd.setColor(120, 120, 120)
-        lcd.drawText(4, divY + 4, "No locations — press F1 to add.", FONT_H)
+        lcd.drawText(4, divY + 4, "No locations — press F3 to add.", FONT_H)
         lcd.setColor(0, 0, 0)
         return
     end
 
-    local maxScroll = math.max(1, #locations - VISIBLE + 1)
+    local maxScroll = math.max(1, #displayLocations - VISIBLE + 1)
     if scrollIndex > maxScroll then scrollIndex = maxScroll end
 
-    local last = math.min(scrollIndex + VISIBLE - 1, #locations)
+    local last = math.min(scrollIndex + VISIBLE - 1, #displayLocations)
     local textOff = isLarge and 5 or 0
     for i = scrollIndex, last do
-        local loc  = locations[i]
+        local loc  = displayLocations[i]
         local rowY = divY + 2 + (i - scrollIndex) * ROW_H
         if i == selectedIndex then
             lcd.setColor(60, 60, 200)
@@ -320,11 +353,11 @@ local function printForm()
     end
 
     -- Scrollbar
-    if #locations > VISIBLE then
+    if #displayLocations > VISIBLE then
         local barX    = scrW - 6
         local barArea = VISIBLE * ROW_H
         local barH    = math.max(4, math.floor(barArea * VISIBLE / #locations))
-        local maxTop  = math.max(1, #locations - VISIBLE)
+        local maxTop  = math.max(1, #displayLocations - VISIBLE)
         local barY    = divY + 2 + math.floor(
                             (barArea - barH) * (scrollIndex - 1) / maxTop)
         lcd.setColor(200, 200, 200)
@@ -348,6 +381,6 @@ return {
     init    = init,
     loop    = loop,
     author  = "Sverrir Gunnlaugsson",
-    version = "1.2.1",
+    version = "1.3.0",
     name    = "Flying Locations",
 }
