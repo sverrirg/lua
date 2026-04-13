@@ -31,7 +31,7 @@
 --   Apps/flyloc.lua
 --   Apps/flyloc/flyloc.jsn
 --
--- Version: 1.3.5
+-- Version: 1.4.0
 -- ─────────────────────────────────────────────────────────────────
 
 -- DS/DC-24 II have a 480x480 screen; all other current models use 320x240.
@@ -55,6 +55,7 @@ local inputName = ""
 local inputWind = 0
 
 -- Notification state
+local editFlag      = false  -- set after save/edit, cleared on first browse draw
 local notifyMsg    = nil   -- message to show, nil = none
 local notifyTime   = 0     -- system time when notification was set
 local notifyTimeout = 5000 -- ms to show notification
@@ -187,6 +188,8 @@ local function initForm(formID)
                 inputName = ""
                 inputWind = 0
                 editIndex = nil
+                notify("Location saved.", 2000)
+                editFlag = true
                 viewAdd = false
                 form.reinit()
             end
@@ -236,6 +239,7 @@ local function keyPressed(key)
     end
     -- Scroll wheel click = send to F3F Tool (browse view only)
     if key == KEY_ENTER and not viewAdd then
+        if editFlag then editFlag = false; return end
         sendToF3F()
         return
     end
@@ -290,6 +294,7 @@ end
 -- ── Custom draw (browse view only) ───────────────────────────────
 local function printForm()
     if viewAdd then return end   -- widgets handle the add view
+    editFlag = false  -- clear after first browse draw
 
     local scrW = isLarge and 440 or 300
 
@@ -382,6 +387,6 @@ return {
     init    = init,
     loop    = loop,
     author  = "Sverrir Gunnlaugsson",
-    version = "1.3.5",
+    version = "1.4.0",
     name    = "Flying Locations",
 }
