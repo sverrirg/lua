@@ -39,7 +39,7 @@ After you add the application under User Applications it appears under Applicati
 * F4 - Delete selected slope
 
 
-![Screen1](docs/images/fl2.png)
+![Screen1](docs/images/fl4.png)
 
 Add new slope.\
 \
