@@ -293,7 +293,7 @@ local function printForm()
         else
             lcd.setColor(0, 0, 0)
         end
-        lcd.drawText(4,      rowY + textOff, loc.name,            FONT_H)
+        lcd.drawText(4,      rowY + textOff, string.sub(loc.name, 1, 22), FONT_H)
         lcd.drawText(COL2_X, rowY + textOff, windLabel(loc.wind), FONT_H)
     end
 
