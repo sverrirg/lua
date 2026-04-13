@@ -33,13 +33,12 @@ After you add the application under User Applications it appears under Applicati
 ![Screen1](docs/images/fl1.png)
 
 **Main screen is a list of slopes, that you can add, edit or delete from.**
-* F1 - Change the sort order, default by slope
+* F1 - Change the sort order, default is by slope
 * F2 - Edit selected slope
 * F3 - Add new slope
 * F4 - Delete selected slope
 
-
-![Screen1](docs/images/fl4.png)
+![Screen1](docs/images/fl2.png)
 
 Add new slope.\
 \
