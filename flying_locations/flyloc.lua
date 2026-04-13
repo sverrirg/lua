@@ -31,7 +31,7 @@
 --   Apps/flyloc.lua
 --   Apps/flyloc/flyloc.jsn
 --
--- Version: 1.2
+-- Version: 1.2.1
 -- ─────────────────────────────────────────────────────────────────
 
 -- DS/DC-24 II have a 480x480 screen; all other current models use 320x240.
@@ -138,8 +138,8 @@ end
 local ROW_H   = isLarge and 28 or 19
 local FONT_H  = FONT_NORMAL
 local FONT_HD = FONT_BOLD
-local COL2_X  = isLarge and 228 or 230
-local VISIBLE = isLarge and 10 or 8
+local COL2_X  = isLarge and 228 or 218
+local VISIBLE = isLarge and 7 or 6
 
 -- ── Form init — rebuilds widgets for current view ─────────────────
 local function initForm(formID)
@@ -293,7 +293,7 @@ local function printForm()
         else
             lcd.setColor(0, 0, 0)
         end
-        lcd.drawText(4,      rowY + textOff, string.sub(loc.name, 1, 22), FONT_H)
+        lcd.drawText(4,      rowY + textOff, string.sub(loc.name, 1, 25), FONT_H)
         lcd.drawText(COL2_X, rowY + textOff, windLabel(loc.wind), FONT_H)
     end
 
@@ -348,6 +348,6 @@ return {
     init    = init,
     loop    = loop,
     author  = "Sverrir Gunnlaugsson",
-    version = "1.2",
+    version = "1.2.1",
     name    = "Flying Locations",
 }
