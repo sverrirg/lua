@@ -10,7 +10,7 @@ File layout on the transmitter:\
    Apps/flyloc.lua\
    Apps/flyloc/flyloc.jsn\
 \
-Version: 1.2.1\
+Version: 1.4\
 \
 flyloc.jsn can be edited on your computer before uploading to the transmitter. It is in a standard json format.\
 Slope names are truncated at 25 characters when displayed in the list to keep the cells from overflowing.\
@@ -32,14 +32,14 @@ After you add the application under User Applications it appears under Applicati
 \
 ![Screen1](docs/images/fl1.png)
 
-**Main screen is a list of slopes, that you can add, edit or delete from.**
-* F1 - Send slope to F3F Tool
+**Main screen is a list of slopes, that you can add, edit or delete from.**\
+Click the scroll wheel to send a slope over to the F3F Tool, remember to set your starting point afterwards.
+* F1 - Change the sort order, * indicates which sort is active, default is by slope
 * F2 - Edit selected slope
 * F3 - Add new slope
 * F4 - Delete selected slope
 
-
-![Screen1](docs/images/fl2.png)
+![Screen1](docs/images/fl2b.png)
 
 Add new slope.\
 \
@@ -52,8 +52,8 @@ Edit an existing slope.\
 
 ## Video
 
-<a href="https://youtube.com/shorts/KEnfwXbVfs8">
-    <img src="docs/images/fl6_ytv.png" alt="Flying Locations and F3F Tool working together" width="400">
+<a href="https://youtube.com/shorts/0OEIP8TdSKM">
+    <img src="docs/images/fl6_ytv2.png" alt="Flying Locations and F3F Tool working together" width="400">
   </a>
 
 ## Files
