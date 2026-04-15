@@ -31,7 +31,7 @@
 --   Apps/flyloc.lua
 --   Apps/flyloc/flyloc.jsn
 --
--- Version: 1.4.0
+-- Version: 1.4.1
 -- ─────────────────────────────────────────────────────────────────
 
 -- DS/DC-24 II have a 480x480 screen; all other current models use 320x240.
@@ -274,17 +274,23 @@ local function keyPressed(key)
             if #displayLocations > 0 then
                 local loc = displayLocations[selectedIndex]
                 local deletedName = loc.name
-                for idx, l in ipairs(locations) do
-                    if l == loc then table.remove(locations, idx); break end
+                local answer = form.question(
+                    string.format('Delete "%s"?', deletedName),
+                    "This cannot be undone.", "", 0, false, 0
+                )
+                if answer == 1 then
+                    for idx, l in ipairs(locations) do
+                        if l == loc then table.remove(locations, idx); break end
+                    end
+                    rebuildDisplay()
+                    if selectedIndex > #displayLocations then
+                        selectedIndex = math.max(1, #displayLocations)
+                    end
+                    scrollIndex = math.max(1, math.min(scrollIndex,
+                        math.max(1, #displayLocations - VISIBLE + 1)))
+                    saveData()
+                    notify(string.format('"%s" deleted', deletedName), 2000)
                 end
-                rebuildDisplay()
-                if selectedIndex > #displayLocations then
-                    selectedIndex = math.max(1, #displayLocations)
-                end
-                scrollIndex = math.max(1, math.min(scrollIndex,
-                    math.max(1, #displayLocations - VISIBLE + 1)))
-                saveData()
-                notify(string.format('"%s" deleted', deletedName), 2000)
             end
         end
     end
@@ -387,6 +393,6 @@ return {
     init    = init,
     loop    = loop,
     author  = "Sverrir Gunnlaugsson",
-    version = "1.4.0",
+    version = "1.4.1",
     name    = "Flying Locations",
 }
